@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPTIMIZE SO | Rendimiento optimizado</title>
+<style>
+:root{--bg:#020305;--panel:#080b0f;--white:#f5f7fa;--muted:#aeb5bd;--line:#26303a}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:Arial,Helvetica,sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+section{position:relative;min-height:100vh;overflow:hidden}
+
+/* ===== FONDO TECNOLÓGICO 100% CSS ===== */
+.tech-bg{background:
+ radial-gradient(circle at 74% 42%,rgba(140,170,200,.18),transparent 8%),
+ radial-gradient(circle at 74% 42%,rgba(80,120,160,.08),transparent 25%),
+ linear-gradient(120deg,#020305 0%,#030609 48%,#070b10 100%);
+}
+.tech-bg:before,.tech-bg:after{content:"";position:absolute;inset:0;pointer-events:none}
+.tech-bg:before{
+ opacity:.32;
+ background:
+ linear-gradient(90deg,transparent 0 9%,rgba(255,255,255,.10) 9.1% 9.2%,transparent 9.3% 100%),
+ linear-gradient(0deg,transparent 0 13%,rgba(255,255,255,.08) 13.1% 13.2%,transparent 13.3% 100%);
+ background-size:90px 90px;
+ mask-image:linear-gradient(90deg,#000 0 58%,transparent 100%);
+}
+.tech-bg:after{
+ background:
+ linear-gradient(125deg,transparent 0 53%,rgba(160,190,220,.18) 53.1%,transparent 53.3%),
+ linear-gradient(145deg,transparent 0 66%,rgba(160,190,220,.12) 66.1%,transparent 66.3%),
+ linear-gradient(90deg,transparent 0 73%,rgba(255,255,255,.08) 73.1% 73.2%,transparent 73.3%);
+ opacity:.45;
+}
+
+/* ===== CABECERA ===== */
+.nav{
+ position:absolute;top:0;left:0;width:100%;height:96px;z-index:50;
+ display:flex;align-items:center;justify-content:space-between;padding:0 4%;
+ border-bottom:1px solid rgba(255,255,255,.08);
+ background:linear-gradient(180deg,rgba(0,0,0,.72),transparent);
+}
+.brand{display:flex;align-items:center;width:190px;height:62px;flex:none}
+.brand-logo{display:block;width:190px;height:auto;max-height:62px;object-fit:contain}
+.navlinks{display:flex;gap:34px;align-items:center}
+.navlinks a{font-size:18px;padding:12px 0;position:relative}
+.navlinks a:hover{opacity:.7}
+.navlinks a.active:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:#fff}
+
+/* ===== PORTADA ===== */
+.hero{display:flex;align-items:center;padding:120px 7% 70px}
+.hero-copy{width:48%;position:relative;z-index:5}
+.eyebrow{font-size:13px;letter-spacing:5px;color:#aab4bf;margin-bottom:25px}
+.hero h1{font-size:clamp(48px,7vw,92px);line-height:.95;letter-spacing:-3px}
+.hero h1 span{font-weight:300}
+.hero p{font-size:23px;color:#bfc6ce;margin:25px 0 34px;max-width:560px;line-height:1.5}
+.btn-outline{display:inline-flex;align-items:center;gap:25px;padding:17px 28px;border:1px solid #bfc8d1;border-radius:5px;font-weight:700;letter-spacing:.5px;transition:.25s}
+.btn-outline:hover{background:#fff;color:#000;transform:translateY(-3px)}
+.arrow{font-size:25px}
+.hero-chip{margin-top:45px;width:280px;height:1px;background:linear-gradient(90deg,#fff,transparent);position:relative}
+.hero-chip:after{content:"";position:absolute;right:0;top:-3px;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 15px #fff}
+
+/* CPU 3D */
+.cpu-scene{position:absolute;right:4%;top:15%;width:51%;height:72%;perspective:900px}
+.board{position:absolute;inset:8% 0 5%;transform:rotateX(58deg) rotateZ(-12deg);border-radius:35px;
+ background:
+ repeating-linear-gradient(0deg,transparent 0 28px,rgba(150,190,220,.10) 29px 30px),
+ repeating-linear-gradient(90deg,transparent 0 28px,rgba(150,190,220,.08) 29px 30px),
+ #05080b;
+ box-shadow:0 0 80px rgba(100,140,180,.16);border:1px solid #26333f}
+.cpu{position:absolute;left:34%;top:31%;width:240px;height:240px;transform:rotateX(58deg) rotateZ(-12deg);
+ background:linear-gradient(145deg,#161b20,#050607 65%);border:4px solid #a9bac8;border-radius:25px;
+ box-shadow:0 0 35px #9fb5c8,0 0 90px rgba(120,170,210,.35),inset 0 0 30px #000}
+.cpu:before{content:"";position:absolute;inset:25px;border:1px solid #4b5b69;border-radius:12px}
+.cpu:after{content:"";position:absolute;inset:65px;border:1px solid #35424e;border-radius:8px;background:radial-gradient(circle,#18212a,#050607)}
+.trace{position:absolute;background:linear-gradient(90deg,transparent,#b8d0e2,transparent);height:2px;opacity:.65}
+.t1{width:310px;left:2%;top:51%;transform:rotate(15deg)}
+.t2{width:300px;right:1%;top:35%;transform:rotate(-18deg)}
+.t3{width:260px;right:8%;top:69%;transform:rotate(20deg)}
+.t4{width:190px;left:20%;top:76%;transform:rotate(-13deg)}
+.node{position:absolute;width:8px;height:8px;border:1px solid #fff;border-radius:50%;box-shadow:0 0 12px #fff}
+
+/* ===== INICIO ===== */
+.about{padding:135px 7% 80px;display:grid;grid-template-columns:42% 58%;align-items:center}
+.about-copy{padding-right:60px;z-index:5}
+.logo-large{font-size:clamp(45px,6vw,78px);font-weight:800;letter-spacing:-2px}
+.rule{width:44px;height:3px;background:#fff;margin:25px 0}
+.about-copy p{font-size:22px;line-height:1.55;color:#c7ccd2}
+.monitor-area{height:560px;position:relative;display:flex;align-items:center;justify-content:center}
+.monitor{width:min(700px,90%);height:390px;background:#050607;border:1px solid #5c6975;border-radius:15px;transform:perspective(900px) rotateY(-8deg) rotateX(2deg);box-shadow:0 20px 80px #000}
+.screen{margin:18px;height:calc(100% - 36px);border-radius:7px;background:#030405;border:1px solid #1d252c;padding:30px;display:grid;grid-template-columns:45% 55%;gap:20px}
+.terminal{font-family:monospace;color:#dbe7ef;font-size:13px;line-height:1.9}
+.graph{border:1px solid #222a31;border-radius:8px;padding:18px}
+.graph-title{font-weight:700;margin-bottom:18px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.stat{background:#0b0e12;border:1px solid #1b2229;border-radius:6px;padding:10px;font-size:10px;color:#89929b}
+.stat b{display:block;font-size:20px;color:#fff;margin-top:6px}
+.graphline{height:95px;margin-top:18px;position:relative;border-bottom:1px solid #333;background:repeating-linear-gradient(0deg,transparent 0 23px,#182028 24px)}
+.graphline:after{content:"";position:absolute;left:0;right:0;top:43px;height:2px;background:linear-gradient(90deg,#777,#fff,#666,#aaa,#fff,#777);clip-path:polygon(0 70%,7% 35%,13% 55%,19% 22%,25% 64%,32% 43%,38% 72%,45% 20%,51% 53%,58% 32%,65% 66%,72% 25%,79% 58%,87% 30%,94% 65%,100% 42%,100% 58%,94% 81%,87% 46%,79% 72%,72% 40%,65% 80%,58% 48%,51% 68%,45% 35%,38% 84%,32% 55%,25% 78%,19% 40%,13% 72%,7% 50%,0 85%)}
+.monitor-stand{position:absolute;bottom:25px;width:180px;height:75px;background:linear-gradient(#151a1e,#060708);clip-path:polygon(30% 0,70% 0,82% 90%,18% 90%);border:1px solid #444}
+.base{position:absolute;bottom:0;width:360px;height:25px;background:#090b0d;border-radius:50%;box-shadow:0 8px 20px #000}
+
+/* ===== SECCIÓN VIDEO / DEMOSTRACIÓN ===== */
+.video-section{padding:120px 7% 80px;display:flex;flex-direction:column;align-items:center;text-align:center;background:linear-gradient(180deg,#030405 0%,#080a0d 100%)}
+.video-section h2{font-size:clamp(32px,5vw,52px);margin-bottom:15px;letter-spacing:-1px}
+.video-section p{font-size:20px;color:#c0c7ce;margin-bottom:40px;max-width:600px}
+.video-wrapper{width:min(900px,100%);position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:14px;border:1px solid #35424e;box-shadow:0 20px 60px rgba(0,0,0,.8),0 0 40px rgba(120,170,210,.15);background:#000}
+.video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+
+/* ===== CARACTERÍSTICAS ===== */
+.features{padding:125px 5% 60px;background:
+ radial-gradient(circle at 20% 20%,rgba(80,110,140,.12),transparent 25%),
+ linear-gradient(135deg,#030405,#080a0d)}
+.feature-top{display:grid;grid-template-columns:1fr 1fr;min-height:440px;border:1px solid #20272e}
+.circuit-panel{position:relative;overflow:hidden;background:
+ repeating-linear-gradient(0deg,transparent 0 42px,rgba(180,210,235,.09) 43px 44px),
+ repeating-linear-gradient(90deg,transparent 0 55px,rgba(180,210,235,.08) 56px 57px),
+ #030506}
+.circuit-panel:before{content:"";position:absolute;inset:15% 5%;background:
+ linear-gradient(145deg,transparent 0 25%,#5c7284 25.2% 25.5%,transparent 25.7%),
+ linear-gradient(35deg,transparent 0 55%,#425565 55.2% 55.5%,transparent 55.7%),
+ radial-gradient(circle at 20% 35%,#fff 0 3px,transparent 4px),
+ radial-gradient(circle at 65% 60%,#fff 0 3px,transparent 4px),
+ radial-gradient(circle at 80% 25%,#fff 0 3px,transparent 4px);filter:drop-shadow(0 0 8px #9eb8cc)}
+.feature-intro{padding:70px;display:flex;flex-direction:column;justify-content:center;background:#030405}
+.feature-intro h2{font-size:50px;line-height:1.08}
+.feature-intro p{font-size:20px;line-height:1.6;color:#c0c7ce;margin-top:25px;max-width:530px}
+.features-title{font-size:18px;margin:30px 0 20px;letter-spacing:1px}
+.feature-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+.feature-card{padding:30px 25px;text-align:center;border-right:1px solid #39424a;transition:.25s;cursor:pointer}
+.feature-card:last-child{border-right:0}
+.feature-card:hover{background:rgba(255,255,255,.035);transform:translateY(-4px)}
+.icon{font-size:48px;height:65px;filter:grayscale(1)}
+.feature-card h3{font-size:21px;margin:15px 0}
+.feature-card p{color:#b8c0c7;line-height:1.45;font-size:16px}
+
+/* ===== DESCARGA ===== */
+.download-section{padding:140px 7% 70px;display:flex;align-items:center;background:
+ radial-gradient(circle at 70% 45%,rgba(70,90,110,.15),transparent 27%),
+ linear-gradient(135deg,#020304,#0a0c0f)}
+.download-copy{width:45%;z-index:5}
+.download-copy h2{font-size:65px;line-height:.95}
+.download-copy p{font-size:20px;color:#c0c6cd;line-height:1.5;margin:25px 0}
+.download-btn{display:inline-flex;align-items:center;gap:18px;background:#fff;color:#050505;border:0;border-radius:7px;padding:19px 28px;font-size:20px;font-weight:800;cursor:pointer;transition:.2s}
+.download-btn:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(255,255,255,.18)}
+.compatible{margin-top:18px;color:#c0c7ce}
+.laptop{position:absolute;right:7%;top:22%;width:48%;height:58%}
+.lid{position:absolute;right:0;top:0;width:75%;height:68%;background:linear-gradient(145deg,#0b0d10,#242a2f);border:2px solid #7b8790;border-radius:14px 14px 9px 9px;transform:skew(-8deg);box-shadow:0 30px 70px #000}
+.lid-screen{position:absolute;inset:12px;background:#020304;border-radius:7px;display:flex;align-items:center;justify-content:center}
+.screen-logo-img{width:220px;max-width:70%;height:auto;display:block}
+.keyboard{position:absolute;right:-2%;bottom:13%;width:88%;height:28%;background:linear-gradient(#252b30,#101316);clip-path:polygon(7% 0,100% 8%,92% 100%,0 80%);border:1px solid #727d85;box-shadow:0 25px 50px #000}
+.keyboard:after{content:"";position:absolute;left:16%;right:12%;top:18%;bottom:18%;background:repeating-linear-gradient(90deg,#111 0 25px,#2c3338 26px 27px),repeating-linear-gradient(0deg,#111 0 18px,#2c3338 19px 20px);opacity:.9}
+.contact{margin-top:60px}
+.contact h3{font-size:27px;margin-bottom:10px}
+.email{font-size:20px;color:#fff}
+.socials{display:flex;gap:22px;position:absolute;right:10%;bottom:13%;z-index:10}
+.social{width:54px;height:54px;border:1px solid #8a949d;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:21px;transition:.2s}
+.social:hover{background:#fff;color:#000;transform:translateY(-4px)}
+
+/* MODAL */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal.show{display:flex}
+.card{width:min(620px,94vw);background:#080a0d;border:1px solid #505b65;border-radius:15px;padding:30px;box-shadow:0 30px 100px #000}
+.card h2{font-size:32px;margin-bottom:15px}
+.card p{color:#c5ccd3;line-height:1.6}
+.close{float:right;background:none;border:1px solid #555;color:#fff;border-radius:7px;padding:7px 12px;cursor:pointer}
+
+@media(max-width:900px){
+ .navlinks{gap:15px}.navlinks a{font-size:13px}.brand{width:130px;height:50px}.brand-logo{width:130px;max-height:50px}
+ .hero{padding-left:6%}.hero-copy{width:80%}.cpu-scene{opacity:.45;width:70%}
+ .about{grid-template-columns:1fr}.about-copy{padding-right:0}.monitor-area{height:430px}
+ .feature-top{grid-template-columns:1fr}.feature-grid{grid-template-columns:1fr 1fr}
+ .download-copy{width:75%}.laptop{opacity:.35;width:70%}
+}
+@media(max-width:600px){
+ section{min-height:100svh}.nav{height:70px}.navlinks a:nth-child(5){display:none}
+ .hero h1{font-size:52px}.hero p{font-size:18px}.cpu-scene{display:none}
+ .about{padding:105px 7% 50px}.about-copy p{font-size:18px}.monitor{height:280px}.screen{padding:12px;grid-template-columns:1fr}.screen .terminal{display:none}
+ .feature-intro{padding:35px}.feature-intro h2{font-size:38px}.feature-grid{grid-template-columns:1fr}.feature-card{border-right:0;border-bottom:1px solid #39424a}
+ .download-copy{width:100%}.download-copy h2{font-size:52px}.laptop{display:none}.socials{position:static;margin-top:25px}
+}
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<section class="hero tech-bg" id="portada">
+ <div class="nav">
+  <a class="brand" href="#portada"><img src="logo-optimize-vector.svg" alt="HOPTIMIZE SO" class="brand-logo"></a>
+  <div class="navlinks">
+   <a class="active" href="#portada">Inicio</a>
+   <a href="#video">Video</a>
+   <a href="#caracteristicas">Características</a>
+   <a href="#descarga">Descarga</a>
+   <a href="#contacto">Contacto</a>
+  </div>
+ </div>
+ <div class="hero-copy">
+  <div class="eyebrow">NUEVA GENERACIÓN · RENDIMIENTO</div>
+  <h1>OPTIMIZE <span>SO</span></h1>
+  <p>Un nuevo estándar de rendimiento.</p>
+  <a class="btn-outline" href="#inicio">CONOCER MÁS <span class="arrow">↓</span></a>
+  <div class="hero-chip"></div>
+ </div>
+ <div class="cpu-scene">
+  <div class="board"></div><div class="cpu"></div>
+  <i class="trace t1"></i><i class="trace t2"></i><i class="trace t3"></i><i class="trace t4"></i>
+  <i class="node" style="left:10%;top:50%"></i><i class="node" style="right:8%;top:34%"></i><i class="node" style="right:17%;top:70%"></i>
+ </div>
+</section>
+
+<!-- INICIO -->
+<section class="about tech-bg" id="inicio">
+ <div class="nav">
+  <a class="brand" href="#portada"><img src="logo-optimize-vector.svg" alt="HOPTIMIZE SO" class="brand-logo"></a>
+  <div class="navlinks">
+   <a href="#portada">Inicio</a>
+   <a href="#video">Video</a>
+   <a href="#caracteristicas">Características</a>
+   <a href="#descarga">Descarga</a>
+   <a href="#contacto">Contacto</a>
+  </div>
+ </div>
+ <div class="about-copy">
+  <div class="logo-large">OPTIMIZE SO</div><div class="rule"></div>
+  <p>Un sistema operativo diseñado para optimizar el rendimiento de tu computadora, ofreciendo una experiencia más rápida, estable y eficiente en cada uso.</p>
+ </div>
+ <div class="monitor-area">
+  <div class="monitor"><div class="screen">
+   <div class="terminal">[optimize@so ~]$ neofetch<br><br>OS: Optimize SO<br>Kernel: 6.6.x<br>Basado en: Linux<br>Entorno: XFCE<br>CPU: 4 núcleos<br>Memoria: 2.9GiB / 7.56GiB<br><br>[optimize@so ~]$</div>
+   <div class="graph"><div class="graph-title">Rendimiento del sistema</div><div class="stats"><div class="stat">CPU<b>14%</b></div><div class="stat">Memoria<b>28%</b></div><div class="stat">Disco<b>18%</b></div><div class="stat">Procesos<b>124</b></div></div><div class="graphline"></div></div>
+  </div></div>
+  <div class="monitor-stand"></div><div class="base"></div>
+ </div>
+</section>
+
+<!-- VIDEO DEMOSTRACIÓN -->
+<section class="video-section" id="video">
+ <div class="nav">
+  <a class="brand" href="#portada"><img src="logo-optimize-vector.svg" alt="HOPTIMIZE SO" class="brand-logo"></a>
+  <div class="navlinks">
+   <a href="#portada">Inicio</a>
+   <a class="active" href="#video">Video</a>
+   <a href="#caracteristicas">Características</a>
+   <a href="#descarga">Descarga</a>
+   <a href="#contacto">Contacto</a>
+  </div>
+ </div>
+ <h2>MIRA OPTIMIZE SO EN ACCIÓN</h2>
+ <p>Descubre la velocidad, fluidez e interfaz de nuestro sistema operativo en este video demostrativo.</p>
+ <div class="video-wrapper">
+  <!-- REEMPLAZA "TU_ID_DE_VIDEO" CON EL ID REAL DE TU VIDEO DE YOUTUBE -->
+  <iframe 
+    src="https://www.youtube.com/embed/TU_ID_DE_VIDEO" 
+    title="Demostración de Optimize SO" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    referrerpolicy="strict-origin-when-cross-origin" 
+    allowfullscreen>
+  </iframe>
+ </div>
+</section>
+
+<!-- CARACTERÍSTICAS -->
+<section class="features" id="caracteristicas">
+ <div class="nav" style="position:absolute">
+  <a class="brand" href="#portada"><img src="logo-optimize-vector.svg" alt="HOPTIMIZE SO" class="brand-logo"></a>
+  <div class="navlinks">
+   <a href="#portada">Inicio</a>
+   <a href="#video">Video</a>
+   <a class="active" href="#caracteristicas">Características</a>
+   <a href="#descarga">Descarga</a>
+   <a href="#contacto">Contacto</a>
+  </div>
+ </div>
+ <div class="feature-top">
+  <div class="circuit-panel"></div>
+  <div class="feature-intro"><h2>Ligero.<br>Estable.<br>Eficiente.</h2><p>Diseñado para ser completamente adaptable a cualquier tipo de uso que el usuario desee darle, sin limitaciones ni restricciones.</p></div>
+ </div>
+ <div class="features-title">CARACTERÍSTICAS PRINCIPALES</div>
+ <div class="feature-grid">
+  <div class="feature-card" onclick="showInfo('Máxima Velocidad','Reducción de tiempos de carga en aplicaciones y respuesta inmediata.')"><div class="icon">🚀</div><h3>Máxima Velocidad</h3><p>Reducción de tiempos de carga en aplicaciones y respuesta inmediata.</p></div>
+  <div class="feature-card" onclick="showInfo('Bajo Consumo','Optimizado para usar menos recursos y extender la vida útil de tu equipo.')"><div class="icon">▣</div><h3>Bajo Consumo</h3><p>Optimizado para usar menos recursos y extender la vida útil de tu equipo.</p></div>
+  <div class="feature-card" onclick="showInfo('Soporte Técnico','Servicio de atención al cliente y guía de descarga.')"><div class="icon">◉</div><h3>Soporte Técnico</h3><p>Servicio de atención al cliente y guía de descarga.</p></div>
+  <div class="feature-card" onclick="showInfo('Estabilidad y Seguridad','Basado en Linux, con actualizaciones de versión constantes.')"><div class="icon">♢</div><h3>Estabilidad y Seguridad</h3><p>Basado en Linux, actualizaciones de versión constantes.</p></div>
+ </div>
+</section>
+
+<!-- DESCARGA Y CONTACTO -->
+<section class="download-section tech-bg" id="descarga">
+ <div class="nav">
+  <a class="brand" href="#portada"><img src="logo-optimize-vector.svg" alt="HOPTIMIZE SO" class="brand-logo"></a>
+  <div class="navlinks">
+   <a href="#portada">Inicio</a>
+   <a href="#video">Video</a>
+   <a href="#caracteristicas">Características</a>
+   <a class="active" href="#descarga">Descarga</a>
+   <a href="#contacto">Contacto</a>
+  </div>
+ </div>
+ <div class="download-copy">
+  <h2>Descarga<br>ahora</h2><div class="rule"></div>
+  <p>Únete a una nueva experiencia de rendimiento.<br>Descarga gratuita, ligera y sin complicaciones.</p>
+  <button class="download-btn" onclick="downloadISO()">⇩ &nbsp; DESCARGAR AHORA</button>
+  <div class="compatible">Compatible con arquitecturas x64</div>
+  <div class="contact" id="contacto">
+   <h3>Contacto</h3>
+   <p>¿Tienes dudas, sugerencias o quieres colaborar?<br>Escríbenos, estaremos encantados de leerte.</p>
+   <a class="email" href="mailto:hoptmizeso@gmail.com">✉ &nbsp; hoptmizeso@gmail.com</a>
+   <p style="margin-top:18px"><a class="email" href="https://www.google.com/maps/search/?api=1&query=Belgrano+450%2C+San+Nicol%C3%A1s+de+los+Arroyos%2C+Buenos+Aires%2C+Argentina" target="_blank" rel="noopener">📍 &nbsp; Belgrano 450, San Nicolás de los Arroyos</a></p>
+  </div>
+ </div>
+ <div class="laptop"><div class="lid"><div class="lid-screen"><img class="screen-logo-img" src="logo-optimize-vector.svg" alt="HOPTIMIZE SO"></div></div><div class="keyboard"></div></div>
+ <div class="socials"><a class="social" href="https://www.instagram.com/hoptimizeso" target="_blank" rel="noopener" aria-label="Instagram">IG</a><a class="social" href="#" onclick="social('GitHub');return false">GH</a><a class="social" href="#" onclick="social('Discord');return false">DC</a><a class="social" href="#" onclick="social('Telegram');return false">TG</a></div>
+</section>
+
+<div class="modal" id="modal"><div class="card"><button class="close" onclick="closeInfo()">Cerrar ✕</button><h2 id="mt"></h2><p id="mp"></p></div></div>
+
+<script>
+function showInfo(t,p){document.getElementById('mt').textContent=t;document.getElementById('mp').textContent=p;document.getElementById('modal').classList.add('show')}
+function closeInfo(){document.getElementById('modal').classList.remove('show')}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeInfo()})
+function downloadISO(){alert('El sitio ya está preparado para descargar OPTIMIZE SO. Cuando tengan el archivo .ISO, lo conectamos al botón y la descarga será real.')}
+function social(x){alert('Cuando tengan la cuenta de '+x+', se puede colocar aquí el enlace oficial.')}
+</script>
+</body>
+</html>
